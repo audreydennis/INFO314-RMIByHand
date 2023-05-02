@@ -10,7 +10,6 @@ public class Client {
     public static int add(int lhs, int rhs) {
         int result = -1;
         try{
-            // System.out.println("Connecting to server (add)");
             Socket socket=new Socket("localhost", PORT);
             RemoteMethod add=new RemoteMethod("add", new Object[]{lhs, rhs}, null);
             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream()); 
@@ -19,15 +18,12 @@ public class Client {
             try{
                 ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
                 RemoteMethod response = (RemoteMethod) in.readObject();
-                System.out.println("Received request: " + response.getMethodName() + "," + Arrays.toString(response.getArguments()));
+                // System.out.println("Received request: " + response.getMethodName() + "," + Arrays.toString(response.getArguments()));
                 System.out.println("Result: " + response.getResult());
-                // System.out.println("Result: " response.getResult());
                 result = (int) response.getResult();
             }catch(IOException e){
                 e.printStackTrace();
             }
-            // out.close();
-            //in.close();
             socket.close(); 
         }catch(ClassNotFoundException e){
             e.printStackTrace();
@@ -42,18 +38,16 @@ public class Client {
     public static int divide(int num, int denom) {
         int result = -1;
         try{
-            // System.out.println("Connecting to server (divide)");
             Socket socket=new Socket("localhost", PORT);
             RemoteMethod divide=new RemoteMethod("divide", new Object[]{num, denom}, null);
-                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream()); 
-                out.writeObject(divide);
-                out.flush(); 
+            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream()); 
+            out.writeObject(divide);
+            out.flush(); 
             try{
                 ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
                 RemoteMethod response = (RemoteMethod) in.readObject();
-                System.out.println("Received: " + response.getMethodName() + "," + Arrays.toString(response.getArguments()) + "," + response.getResult());
+                System.out.println("Result: " + response.getResult());
                 Object testing = response.getResult(); //had this typecast
-                // result = (int) response.getResult();
                 if (testing instanceof Integer) {
                     result = (int) testing;
                 } else {
@@ -66,7 +60,7 @@ public class Client {
         }catch(ClassNotFoundException e){
             e.printStackTrace();
         }catch(IOException e){
-            e.printStackTrace();
+            System.out.println("Can't connect to server");
         }
         return result;
     }
@@ -76,7 +70,6 @@ public class Client {
     public static String echo(String message) {
         String result = "Not";
         try{
-            // System.out.println("Connecting to server (echo)");
             Socket socket=new Socket("localhost", PORT);
             RemoteMethod echo=new RemoteMethod("echo", new Object[]{message}, null);
                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream()); 
@@ -85,9 +78,8 @@ public class Client {
             try{
                 ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
                 RemoteMethod response = (RemoteMethod) in.readObject();
-                System.out.println("Received request: " + response.getMethodName() + "," + Arrays.toString(response.getArguments()));
+                // System.out.println("Received request: " + response.getMethodName() + "," + Arrays.toString(response.getArguments()));
                 System.out.println("Result: " + response.getResult());
-                // System.out.println("Result: " response.getResult());
                 result = response.getResult().toString();
             }catch(IOException e){
                 e.printStackTrace();

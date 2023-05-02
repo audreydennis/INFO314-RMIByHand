@@ -14,7 +14,7 @@ public class Server {
                 // System.out.println("Accepted connection from: " + socket.getInetAddress());
                 ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
                 RemoteMethod remoteMethod = (RemoteMethod) in.readObject(); // read and deserialize the RemoteMethod object
-                System.out.println("Received: " + remoteMethod.getMethodName() + "," + Arrays.toString(remoteMethod.getArguments()) + "," + remoteMethod.getResult());
+                // System.out.println("Received: " + remoteMethod.getMethodName() + "," + Arrays.toString(remoteMethod.getArguments()) + "," + remoteMethod.getResult());
                 
                 String methodName = remoteMethod.getMethodName();
                 Object[] arguments = remoteMethod.getArguments();
@@ -28,7 +28,7 @@ public class Server {
                     try{
                        results = divide((Integer) arguments[0], (Integer) arguments[1]); 
                     } catch(ArithmeticException e){
-                        System.out.println(e);
+                        // System.out.println(e);
                         results=e.getClass().getSimpleName();
                         // results=e; sends java.lang.ArithmeticException
                     }
@@ -38,7 +38,7 @@ public class Server {
                 
                 // Send the result back to the client
                 RemoteMethod response=new RemoteMethod(methodName, arguments, results);
-                System.out.println("Sending Response: " + response.getMethodName() + "," + Arrays.toString(response.getArguments()) + "," + response.getResult());
+                // System.out.println("Sending Response: " + response.getMethodName() + "," + Arrays.toString(response.getArguments()) + "," + response.getResult());
                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream()); 
                 out.writeObject(response);
                 out.flush();  
